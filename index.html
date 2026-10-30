@@ -3,179 +3,442 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>David - Twagirumukiza Innocent (TWAG)</title>
+    <title>David — Twagirumukiza Innocent (TWAG)</title>
+    <meta name="description" content="David — Avant le combat. Réinterprétation contemporaine, stylisée et graphique du célèbre portrait du David de Michel-Ange par Twagirumukiza Innocent (TWAG). Clair-obscur radical, de l'atelier parisien au street art au Spot 13.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        :root {
+            --bg: #0a0a0a;
+            --card: #121212;
+            --border: #262626;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d0d0d;
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg);
             color: #e5e5e5;
         }
-        
-        .font-serif-title {
+
+        .font-cinzel {
             font-family: 'Cinzel', serif;
         }
 
         .bg-grid {
-            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
         }
 
         .image-glow {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
         }
 
         .image-glow:hover {
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
-            transform: scale(1.01);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(255, 255, 255, 0.08);
+        }
+
+        .gallery-item img {
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.03);
+        }
+
+        /* Lightbox */
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        #lightbox.active {
+            display: flex;
+        }
+
+        #lightbox img {
+            max-height: 90vh;
+            max-width: 95vw;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .scroll-smooth {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
-<body class="bg-grid min-h-screen flex flex-col justify-between selection:bg-white selection:text-black">
+<body class="bg-grid min-h-screen scroll-smooth selection:bg-white selection:text-black">
 
-    <!-- Header Navigation -->
-    <header class="border-b border-neutral-800 bg-black/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <span class="text-2xl font-bold font-serif-title tracking-widest text-white">TWAG</span>
-                <span class="text-xs px-2 py-1 bg-neutral-800 text-neutral-400 rounded uppercase tracking-wider">Art Exhibit</span>
+    <!-- Header -->
+    <header class="border-b border-neutral-800 bg-black/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl font-bold font-cinzel tracking-[0.2em] text-white">TWAG</span>
+                <span class="hidden sm:inline text-[10px] px-2 py-1 bg-neutral-800 text-neutral-400 rounded uppercase tracking-wider">Art Exhibit</span>
             </div>
-            <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-wider text-neutral-400">
-                <a href="#about" class="hover:text-white transition">L'Œuvre</a>
-                <a href="#history" class="hover:text-white transition">Histoire & Spot 13</a>
-                <a href="#gallery" class="hover:text-white transition">Galerie</a>
+            <nav class="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest text-neutral-400">
+                <a href="#oeuvre" class="hover:text-white transition">L'Œuvre</a>
+                <a href="#processus" class="hover:text-white transition">Processus</a>
+                <a href="#mural" class="hover:text-white transition">Street Art</a>
+                <a href="#galerie" class="hover:text-white transition">Galerie</a>
             </nav>
+            <button id="menuBtn" class="md:hidden text-neutral-400 hover:text-white">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-neutral-800 bg-black px-5 py-4 space-y-3 text-sm uppercase tracking-wider">
+            <a href="#oeuvre" class="block text-neutral-400 hover:text-white">L'Œuvre</a>
+            <a href="#processus" class="block text-neutral-400 hover:text-white">Processus</a>
+            <a href="#mural" class="block text-neutral-400 hover:text-white">Street Art</a>
+            <a href="#galerie" class="block text-neutral-400 hover:text-white">Galerie</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative py-20 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div class="lg:col-span-7 space-y-6">
-            <div class="inline-block border-l-2 border-white pl-4 py-1">
-                <span class="text-xs uppercase tracking-widest text-neutral-400 block">Art contemporain & Street Art</span>
-                <span class="text-sm font-semibold text-neutral-200">Twagirumukiza Innocent</span>
-            </div>
-            
-            <h1 class="text-5xl lg:text-7xl font-serif-title font-bold text-white leading-tight">
-                DAVID <br>
-                <span class="text-neutral-500 italic font-normal text-3xl lg:text-5xl">Avant le combat</span>
-            </h1>
-            
-            <p class="text-neutral-300 text-lg leading-relaxed max-w-2xl font-light">
-                Une réinterprétation graphique saisissante du regard de David avant d'affronter Goliath. Née pendant le confinement à Paris, cette œuvre en clair-obscur radical capture la concentration absolue et la détermination stoïque.
-            </p>
+    <!-- Hero -->
+    <section id="oeuvre" class="relative py-16 lg:py-24 px-5 sm:px-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+            <div class="lg:col-span-6 space-y-6 order-2 lg:order-1">
+                <div class="inline-block border-l-2 border-white pl-4">
+                    <span class="text-[11px] uppercase tracking-[0.2em] text-neutral-400 block">Art contemporain & Street Art</span>
+                    <span class="text-sm font-medium text-neutral-200">Twagirumukiza Innocent</span>
+                </div>
 
-            <div class="flex flex-wrap gap-4 pt-4">
-                <a href="#gallery" class="px-6 py-3 bg-white text-black font-semibold uppercase text-xs tracking-widest hover:bg-neutral-200 transition flex items-center gap-2">
-                    <i class="fa-solid fa-eye"></i> Explorer les versions
-                </a>
-                <a href="#history" class="px-6 py-3 border border-neutral-700 text-white font-semibold uppercase text-xs tracking-widest hover:bg-neutral-900 transition flex items-center gap-2">
-                    <i class="fa-solid fa-book-open"></i> Découvrir l'histoire
-                </a>
-            </div>
-        </div>
+                <h1 class="font-cinzel font-bold text-white leading-none">
+                    <span class="block text-5xl sm:text-6xl lg:text-7xl tracking-tight">DAVID</span>
+                    <span class="block mt-2 text-2xl sm:text-3xl lg:text-4xl font-normal italic text-neutral-500">Avant le combat</span>
+                </h1>
 
-        <!-- Hero Feature Image / Artwork Frame -->
-        <div class="lg:col-span-5 relative">
-            <div class="p-4 bg-neutral-900 border border-neutral-800 rounded-lg image-glow">
-                <div class="relative aspect-[3/4] bg-black overflow-hidden rounded border border-neutral-800 flex items-center justify-center">
-                    <div class="text-center p-8 space-y-4">
-                        <i class="fa-solid fa-palette text-5xl text-neutral-600"></i>
-                        <h3 class="font-serif-title text-xl text-white">David (TWAG)</h3>
-                        <p class="text-xs text-neutral-400 leading-relaxed">
-                            Avis d'exposition : Remplacez les sources d'images ci-dessous par vos fichiers locaux pour afficher l'œuvre en haute définition.
-                        </p>
+                <p class="text-neutral-300 text-base sm:text-lg leading-relaxed max-w-xl font-light">
+                    Réinterprétation contemporaine, stylisée et graphique du célèbre portrait du David de Michel-Ange.
+                    L'œuvre capture le visage de trois-quarts de David, saisissant l'instant de tension,
+                    de détermination et de concentration absolue juste avant son affrontement mythique contre Goliath.
+                </p>
+
+                <div class="flex flex-wrap gap-3 pt-2">
+                    <a href="#galerie" class="inline-flex items-center gap-2 px-5 py-3 bg-white text-black font-semibold uppercase text-[11px] tracking-widest hover:bg-neutral-200 transition">
+                        <i class="fa-solid fa-images"></i> Voir la galerie
+                    </a>
+                    <a href="#mural" class="inline-flex items-center gap-2 px-5 py-3 border border-neutral-700 text-white font-semibold uppercase text-[11px] tracking-widest hover:bg-neutral-900 transition">
+                        <i class="fa-solid fa-spray-can"></i> Version murale
+                    </a>
+                </div>
+
+                <div class="pt-4 flex flex-wrap gap-6 text-xs text-neutral-500">
+                    <div>
+                        <span class="block text-neutral-400 uppercase tracking-wider mb-0.5">Technique</span>
+                        Acrylique & Encre
+                    </div>
+                    <div>
+                        <span class="block text-neutral-400 uppercase tracking-wider mb-0.5">Lieu</span>
+                        Paris, 2020
+                    </div>
+                    <div>
+                        <span class="block text-neutral-400 uppercase tracking-wider mb-0.5">Signature</span>
+                        TWAG
                     </div>
                 </div>
-                <div class="mt-4 flex justify-between items-center text-xs text-neutral-400">
-                    <span>Acroylique & Encre</span>
-                    <span class="text-neutral-500">Paris, 2020</span>
+            </div>
+
+            <!-- Hero artwork -->
+            <div class="lg:col-span-6 order-1 lg:order-2">
+                <div class="relative group cursor-pointer image-glow" onclick="openLightbox('assets/framed-03.jpg')">
+                    <div class="absolute -inset-1 bg-gradient-to-br from-neutral-700/40 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    <div class="relative bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden shadow-2xl">
+                        <img src="assets/framed-03.jpg"
+                             alt="David (TWAG) — version encadrée"
+                             class="w-full aspect-[3/4] object-cover object-center"
+                             loading="eager">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-5">
+                            <span class="text-xs uppercase tracking-widest text-white/90">
+                                <i class="fa-solid fa-expand mr-2"></i> Agrandir
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex justify-between text-xs text-neutral-500">
+                        <span>Version encadrée</span>
+                        <span>Exposition</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Context & History -->
-    <section id="history" class="py-20 bg-neutral-950 border-y border-neutral-900">
-        <div class="max-w-5xl mx-auto px-6 space-y-12">
-            <div class="text-center space-y-4">
-                <h2 class="text-3xl font-serif-title text-white">Du Confinement au Street Art</h2>
-                <div class="w-12 h-0.5 bg-white mx-auto"></div>
+    <!-- Artistic analysis -->
+    <section class="py-16 border-y border-neutral-900 bg-neutral-950/80">
+        <div class="max-w-5xl mx-auto px-5 sm:px-6">
+            <div class="text-center mb-12">
+                <h2 class="font-cinzel text-2xl sm:text-3xl text-white mb-3">Analyse artistique</h2>
+                <div class="w-12 h-px bg-white mx-auto"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-6 bg-neutral-900/50 border border-neutral-800 rounded-lg space-y-3">
-                    <div class="text-xl font-bold text-white font-serif-title">01. Génèse</div>
-                    <h4 class="text-sm font-semibold text-neutral-300">Confinement à Paris</h4>
-                    <p class="text-xs text-neutral-400 leading-relaxed">
-                        Conçue dans la solitude de l'atelier parisien pendant le confinement, l'œuvre reflète une tension contenue et une résilience face à l'adversité.
+            <p class="text-neutral-300 text-center max-w-3xl mx-auto mb-12 leading-relaxed font-light">
+                Twagirumukiza Innocent (TWAG) propose une réinterprétation contemporaine, stylisée et graphique
+                du célèbre portrait du David de Michel-Ange. Le regard intense, le sourcil légèrement froncé,
+                la ligne ferme du nez et de la bouche traduisent une force intérieure et une résolution calme.
+            </p>
+
+            <div class="grid sm:grid-cols-3 gap-6">
+                <div class="bg-neutral-900/60 border border-neutral-800 rounded-lg p-6 space-y-3">
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+                        <i class="fa-solid fa-circle-half-stroke text-white"></i>
+                    </div>
+                    <h3 class="font-medium text-white">Minimalisme & Contraste</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Traitée exclusivement en noir et blanc (clair-obscur radical), l'œuvre élimine les nuances de gris
+                        pour ne conserver que les ombres pleines et les zones de lumière pure.
                     </p>
                 </div>
-
-                <div class="p-6 bg-neutral-900/50 border border-neutral-800 rounded-lg space-y-3">
-                    <div class="text-xl font-bold text-white font-serif-title">02. Viralité</div>
-                    <h4 class="text-sm font-semibold text-neutral-300">Succès Web & Réseaux</h4>
-                    <p class="text-xs text-neutral-400 leading-relaxed">
-                        Partagée en ligne, le minimalisme puissant de la composition séduit un large public sur Internet et propulse le motif sur la scène numérique.
+                <div class="bg-neutral-900/60 border border-neutral-800 rounded-lg p-6 space-y-3">
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+                        <i class="fa-solid fa-pen-nib text-white"></i>
+                    </div>
+                    <h3 class="font-medium text-white">Lignes fluides & organiques</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Les détails du visage, de la chevelure bouclée et de l'épaule sont traduits par des aplats de formes
+                        fluides et dynamiques qui rappellent un découpage, un pochoir ou une illustration vectorielle épurée.
                     </p>
                 </div>
-
-                <div class="p-6 bg-neutral-900/50 border border-neutral-800 rounded-lg space-y-3">
-                    <div class="text-xl font-bold text-white font-serif-title">03. Monumental</div>
-                    <h4 class="text-sm font-semibold text-neutral-300">Fresque au Spot 13</h4>
-                    <p class="text-xs text-neutral-400 leading-relaxed">
-                        L'œuvre trouve son expression ultime dans la rue à Paris (Spot 13), transposée sur un mur de briques brutes à grande échelle.
+                <div class="bg-neutral-900/60 border border-neutral-800 rounded-lg p-6 space-y-3">
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+                        <i class="fa-solid fa-eye text-white"></i>
+                    </div>
+                    <h3 class="font-medium text-white">Décomposition des volumes</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Les traits sculpturaux du David classique sont redéfinis par un jeu d'espace négatif où le fond noir
+                        et le blanc du motif s'équilibrent pour former la structure du visage.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Artwork Specifications -->
-    <section id="about" class="py-20 max-w-7xl mx-auto px-6">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6">
-                <h2 class="text-3xl font-serif-title text-white">Analyse Artistique</h2>
-                <p class="text-neutral-300 text-sm leading-relaxed">
-                    L'artiste <strong>Twagirumukiza Innocent</strong> revisite le chef-d'œuvre classique de Michel-Ange par une approche radicalement graphique. En supprimant toutes les nuances de gris, il isole l'essence même du regard de David.
+    <!-- Process -->
+    <section id="processus" class="py-20 px-5 sm:px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-14">
+            <h2 class="font-cinzel text-2xl sm:text-3xl text-white mb-3">Du croquis à l'œuvre</h2>
+            <p class="text-neutral-400 text-sm max-w-xl mx-auto">
+                Version sur papier et formats encadrés — le visage découpé sur un fond noir uni rectangulaire, soulignant l'aspect tableau de galerie.
+                Genèse en atelier pendant le confinement — Paris, 2020
+            </p>
+            <div class="w-12 h-px bg-white mx-auto mt-4"></div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+            <figure class="gallery-item group cursor-pointer" onclick="openLightbox('assets/process-02-esquisse.jpg')">
+                <div class="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 aspect-[4/5]">
+                    <img src="assets/process-02-esquisse.jpg" alt="Esquisse et début de peintre" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <figcaption class="mt-3 text-center">
+                    <span class="text-xs uppercase tracking-widest text-neutral-500">01</span>
+                    <p class="text-sm text-neutral-300 mt-1">Esquisse & premiers traits</p>
+                </figcaption>
+            </figure>
+            <figure class="gallery-item group cursor-pointer" onclick="openLightbox('assets/process-01-atelier.jpg')">
+                <div class="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 aspect-[4/5]">
+                    <img src="assets/process-01-atelier.jpg" alt="Travail en atelier" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <figcaption class="mt-3 text-center">
+                    <span class="text-xs uppercase tracking-widest text-neutral-500">02</span>
+                    <p class="text-sm text-neutral-300 mt-1">Travail en atelier</p>
+                </figcaption>
+            </figure>
+            <figure class="gallery-item group cursor-pointer" onclick="openLightbox('assets/process-03-final-atelier.jpg')">
+                <div class="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 aspect-[4/5]">
+                    <img src="assets/process-03-final-atelier.jpg" alt="Œuvre terminée en atelier" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <figcaption class="mt-3 text-center">
+                    <span class="text-xs uppercase tracking-widest text-neutral-500">03</span>
+                    <p class="text-sm text-neutral-300 mt-1">Version finale atelier</p>
+                </figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <!-- Street Art / Mural -->
+    <section id="mural" class="py-20 bg-neutral-950 border-y border-neutral-900">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6">
+            <div class="text-center mb-14">
+                <h2 class="font-cinzel text-2xl sm:text-3xl text-white mb-3">De l'atelier à la rue</h2>
+                <p class="text-neutral-400 text-sm max-w-xl mx-auto">
+                    Transposition monumentale — Spot 13, Paris 13<sup>e</sup>
                 </p>
-                <ul class="space-y-3 text-sm text-neutral-400">
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-check text-white mt-1"></i>
-                        <span><strong>Clair-obscur pur :</strong> Seuls le noir profond et le blanc éclatant composent les formes et le volume.</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-check text-white mt-1"></i>
-                        <span><strong>Lignes fluides :</strong> Découpage stylisé des boucles de cheveux et de l'anatomie faciale.</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-check text-white mt-1"></i>
-                        <span><strong>Espace négatif :</strong> L'ombre dessine les contours et donne vie au regard tendu.</span>
-                    </li>
-                </ul>
+                <div class="w-12 h-px bg-white mx-auto mt-4"></div>
             </div>
 
-            <div class="bg-neutral-900 border border-neutral-800 p-8 rounded-lg space-y-4">
-                <h3 class="text-lg font-serif-title text-white mb-4">Fiche Technique</h3>
-                <div class="divide-y divide-neutral-800 text-sm">
-                    <div class="py-2 flex justify-between"><span class="text-neutral-500">Artiste</span><span class="text-neutral-200">Twagirumukiza Innocent (TWAG)</span></div>
-                    <div class="py-2 flex justify-between"><span class="text-neutral-500">Titre</span><span class="text-neutral-200">David</span></div>
-                    <div class="py-2 flex justify-between"><span class="text-neutral-500">Sujet</span><span class="text-neutral-200">Visage de David avant Goliath</span></div>
-                    <div class="py-2 flex justify-between"><span class="text-neutral-500">Création initiale</span><span class="text-neutral-200">Paris (Période Confinement)</span></div>
-                    <div class="py-2 flex justify-between"><span class="text-neutral-500">Lieu d'exposition mural</span><span class="text-neutral-200">Spot 13, Paris (13e)</span></div>
-                    <div class="py-2 flex justify-between"><span class="text-neutral-500">Style</span><span class="text-neutral-200">Graphic Line / Street Art</span></div>
+            <!-- Main mural final -->
+            <div class="mb-12 max-w-4xl mx-auto">
+                <figure class="gallery-item cursor-pointer" onclick="openLightbox('assets/mural-final-01.jpg')">
+                    <div class="overflow-hidden rounded-xl border border-neutral-800 bg-black shadow-2xl">
+                        <img src="assets/mural-final-01.jpg"
+                             alt="David (TWAG) — fresque finale au Spot 13"
+                             class="w-full aspect-video object-cover object-center"
+                             loading="lazy">
+                    </div>
+                    <figcaption class="mt-4 text-center text-sm text-neutral-400">
+                        Fresque finale — signature TWAG
+                    </figcaption>
+                </figure>
+            </div>
+
+            <!-- WIP + context -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <figure class="gallery-item cursor-pointer" onclick="openLightbox('assets/mural-01-wip.jpg')">
+                    <div class="overflow-hidden rounded-lg border border-neutral-800 aspect-square">
+                        <img src="assets/mural-01-wip.jpg" alt="Mural en cours" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <figcaption class="mt-2 text-xs text-neutral-500 text-center">Work in progress</figcaption>
+                </figure>
+                <figure class="gallery-item cursor-pointer" onclick="openLightbox('assets/mural-03-wip.jpg')">
+                    <div class="overflow-hidden rounded-lg border border-neutral-800 aspect-square">
+                        <img src="assets/mural-03-wip.jpg" alt="Mural en cours 2" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <figcaption class="mt-2 text-xs text-neutral-500 text-center">Progression</figcaption>
+                </figure>
+                <figure class="gallery-item cursor-pointer" onclick="openLightbox('assets/mural-context-04.jpg')">
+                    <div class="overflow-hidden rounded-lg border border-neutral-800 aspect-square">
+                        <img src="assets/mural-context-04.jpg" alt="Mural dans son contexte" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <figcaption class="mt-2 text-xs text-neutral-500 text-center">Dans le passage</figcaption>
+                </figure>
+                <figure class="gallery-item cursor-pointer" onclick="openLightbox('assets/mural-final-02.jpg')">
+                    <div class="overflow-hidden rounded-lg border border-neutral-800 aspect-square">
+                        <img src="assets/mural-final-02.jpg" alt="Détail de la fresque" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <figcaption class="mt-2 text-xs text-neutral-500 text-center">Détail</figcaption>
+                </figure>
+            </div>
+
+            <p class="mt-10 text-center text-neutral-400 text-sm max-w-2xl mx-auto leading-relaxed">
+                Lors de sa réalisation sur le mur en parpaings du Spot 13 à Paris, l'œuvre a été peinte à grande échelle.
+                Le fond noir enveloppe le portrait et s'articule sur le côté gauche avec un motif géométrique crénelé vertical
+                en noir et blanc, accompagné de la signature manuscrite « TWAG ». La texture brute du mur et les briques
+                apparentes apportent une dimension street art authentique et monumentale à la composition classique.
+            </p>
+        </div>
+    </section>
+
+    <!-- Gallery of framed / expo versions -->
+    <section id="galerie" class="py-20 px-5 sm:px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-14">
+            <h2 class="font-cinzel text-2xl sm:text-3xl text-white mb-3">Galerie</h2>
+            <p class="text-neutral-400 text-sm">Versions encadrées & accrochages</p>
+            <div class="w-12 h-px bg-white mx-auto mt-4"></div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <figure class="gallery-item cursor-pointer" onclick="openLightbox('assets/framed-01.jpg')">
+                <div class="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 aspect-[3/4]">
+                    <img src="assets/framed-01.jpg" alt="David encadré" class="w-full h-full object-cover" loading="lazy">
                 </div>
+            </figure>
+            <figure class="gallery-item cursor-pointer" onclick="openLightbox('assets/framed-02.jpg')">
+                <div class="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 aspect-[3/4]">
+                    <img src="assets/framed-02.jpg" alt="David — vue d'exposition" class="w-full h-full object-cover" loading="lazy">
+                </div>
+            </figure>
+            <figure class="gallery-item cursor-pointer" onclick="openLightbox('assets/framed-duo.jpg')">
+                <div class="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 aspect-[3/4]">
+                    <img src="assets/framed-duo.jpg" alt="Deux versions côte à côte" class="w-full h-full object-cover" loading="lazy">
+                </div>
+            </figure>
+            <figure class="gallery-item cursor-pointer sm:col-span-2 lg:col-span-3" onclick="openLightbox('assets/expo-salle.jpg')">
+                <div class="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 aspect-video max-h-[420px]">
+                    <img src="assets/expo-salle.jpg" alt="Accrochage en salle d'exposition" class="w-full h-full object-cover object-center" loading="lazy">
+                </div>
+                <figcaption class="mt-3 text-center text-sm text-neutral-400">
+                    Accrochage en salle — David aux côtés d'autres œuvres
+                </figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <!-- Technical sheet -->
+    <section class="py-16 border-t border-neutral-900 bg-neutral-950">
+        <div class="max-w-3xl mx-auto px-5 sm:px-6">
+            <h2 class="font-cinzel text-xl text-white text-center mb-8">Fiche technique</h2>
+            <div class="bg-neutral-900 border border-neutral-800 rounded-lg overflow-hidden">
+                <dl class="divide-y divide-neutral-800 text-sm">
+                    <div class="px-6 py-4 flex justify-between gap-4">
+                        <dt class="text-neutral-500">Artiste</dt>
+                        <dd class="text-neutral-200 text-right">Twagirumukiza Innocent (TWAG)</dd>
+                    </div>
+                    <div class="px-6 py-4 flex justify-between gap-4">
+                        <dt class="text-neutral-500">Titre</dt>
+                        <dd class="text-neutral-200 text-right">David — Avant le combat</dd>
+                    </div>
+                    <div class="px-6 py-4 flex justify-between gap-4">
+                        <dt class="text-neutral-500">Sujet</dt>
+                        <dd class="text-neutral-200 text-right">Visage de trois-quarts de David avant Goliath</dd>
+                    </div>
+                    <div class="px-6 py-4 flex justify-between gap-4">
+                        <dt class="text-neutral-500">Création initiale</dt>
+                        <dd class="text-neutral-200 text-right">Paris, confinement 2020</dd>
+                    </div>
+                    <div class="px-6 py-4 flex justify-between gap-4">
+                        <dt class="text-neutral-500">Technique</dt>
+                        <dd class="text-neutral-200 text-right">Acrylique & encre sur support</dd>
+                    </div>
+                    <div class="px-6 py-4 flex justify-between gap-4">
+                        <dt class="text-neutral-500">Fresque</dt>
+                        <dd class="text-neutral-200 text-right">Spot 13, Paris 13<sup>e</sup></dd>
+                    </div>
+                    <div class="px-6 py-4 flex justify-between gap-4">
+                        <dt class="text-neutral-500">Style</dt>
+                        <dd class="text-neutral-200 text-right">Graphic Line · Clair-obscur radical · Street Art</dd>
+                    </div>
+                </dl>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-neutral-900 bg-black py-8 text-center text-xs text-neutral-500">
-        <p>© Twagirumukiza Innocent. Présentation web de l'œuvre "David".</p>
+    <footer class="border-t border-neutral-900 bg-black py-10 text-center">
+        <p class="font-cinzel text-lg tracking-widest text-white mb-2">TWAG</p>
+        <p class="text-xs text-neutral-500">
+            © Twagirumukiza Innocent — Présentation de l'œuvre « David »
+        </p>
     </footer>
 
+    <!-- Lightbox -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <button class="absolute top-5 right-5 text-white/80 hover:text-white text-2xl z-10" aria-label="Fermer">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="lightboxImg" src="" alt="Agrandissement">
+    </div>
+
+    <script>
+        // Mobile menu
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+
+        // Lightbox
+        function openLightbox(src) {
+            const lb = document.getElementById('lightbox');
+            document.getElementById('lightboxImg').src = src;
+            lb.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
 </body>
 </html>
