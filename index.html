@@ -395,7 +395,7 @@
     <!-- Footer -->
     <footer class="border-t border-neutral-900 bg-black py-10 text-center">
         <p class="font-cinzel text-lg tracking-widest text-white mb-3">TWAG</p>
-        <div class="flex items-center justify-center gap-6 mb-4">
+        <div class="flex flex-wrap items-center justify-center gap-6 mb-4">
             <a href="https://www.instagram.com/inno_twa/" target="_blank" rel="noopener noreferrer"
                class="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition text-sm">
                 <i class="fa-brands fa-instagram text-lg"></i>
@@ -405,6 +405,11 @@
                class="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition text-sm">
                 <i class="fa-brands fa-instagram text-lg"></i>
                 <span>@inno_twag</span>
+            </a>
+            <a href="https://www.saatchiart.com/account/artworks/1973067" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition text-sm">
+                <i class="fa-solid fa-palette text-lg"></i>
+                <span>Saatchi Art</span>
             </a>
         </div>
         <p class="text-xs text-neutral-500">
@@ -443,5 +448,35 @@
             if (e.key === 'Escape') closeLightbox();
         });
     </script>
+
+    <!-- ============================================================
+         ANALYTICS — Choisis UNE option et remplace les valeurs
+         ============================================================ -->
+
+    <!-- OPTION 1 : GoatCounter (recommandé — gratuit, privé, sans cookies)
+         1. Va sur https://www.goatcounter.com → Create account
+         2. Crée un site (ex. david-twag)
+         3. Remplace "TON-CODE" ci-dessous par ton code (ex. david-twag)
+    -->
+    <!--
+    <script data-goatcounter="https://TON-CODE.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+    -->
+
+    <!-- OPTION 2 : Google Analytics 4
+         1. Va sur https://analytics.google.com → Créer une propriété
+         2. Choisis "Web" → récupère ton ID (G-XXXXXXXXXX)
+         3. Remplace G-XXXXXXXXXX ci-dessous
+    -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    -->
+
 </body>
 </html>
